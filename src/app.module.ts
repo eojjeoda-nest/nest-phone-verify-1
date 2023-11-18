@@ -3,6 +3,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { addTransactionalDataSource } from 'typeorm-transactional';
 import { DataSource } from 'typeorm';
+import { PhoneVerifyModule } from './domain/phone-verify/phone-verify.module';
+import { PhoneVerify } from './domain/phone-verify/phone-verify.entity';
 
 @Module({
   imports: [
@@ -24,10 +26,11 @@ import { DataSource } from 'typeorm';
         if (!options) {
           throw new Error('Invalid options passed');
         }
-
         return addTransactionalDataSource(new DataSource(options));
       },
     }),
+    TypeOrmModule.forFeature([PhoneVerify]),
+    PhoneVerifyModule,
   ],
   controllers: [],
   providers: [],
