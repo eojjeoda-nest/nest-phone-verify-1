@@ -1,6 +1,10 @@
 import { Body, Controller, Post } from '@nestjs/common'
 import { CertificationsService } from './certifications.service'
-import { CreateCertificationPhoneDto } from './dto/certifications.dto'
+import {
+    CreateCertificationPhoneDto,
+    CertificationPhoneVerifyDto,
+} from './dto/certifications.dto'
+import { ResponseDto } from 'src/commonDto/common.dto'
 
 @Controller('certifications')
 export class CertificationsController {
@@ -9,7 +13,9 @@ export class CertificationsController {
     ) {}
 
     @Post('phone')
-    create(@Body() createCertificationDto: CreateCertificationPhoneDto) {
+    create(
+        @Body() createCertificationDto: CreateCertificationPhoneDto
+    ): ResponseDto<CertificationPhoneVerifyDto> {
         return this.certificationsService.create(createCertificationDto)
     }
 }

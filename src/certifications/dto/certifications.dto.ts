@@ -4,6 +4,6 @@ export class CertificationPhoneDto {
 
 export class CreateCertificationPhoneDto extends CertificationPhoneDto {}
 
-export class ResponseCertificationPhoneVerifyDto extends CertificationPhoneDto {
+export class CertificationPhoneVerifyDto extends CertificationPhoneDto {
     code: string
 }
