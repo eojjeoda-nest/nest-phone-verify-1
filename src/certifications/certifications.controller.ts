@@ -8,7 +8,7 @@ export class CertificationsController {
         private readonly certificationsService: CertificationsService
     ) {}
 
-    @Post()
+    @Post('phone')
     create(@Body() createCertificationDto: CreateCertificationPhoneDto) {
         return this.certificationsService.create(createCertificationDto)
     }
