@@ -1,6 +1,6 @@
 import { IsString } from 'class-validator';
 
-export class VerifyCodeRequestDto {
+export class PhoneVerifyCodeRequestDto {
   @IsString()
   phoneNumber: string;
 }

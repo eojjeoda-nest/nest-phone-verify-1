@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PhoneVerify } from './phone-verify.entity';
 import { Repository } from 'typeorm';
-import { VerifyCodeRequestDto } from './dto/request/verify-code-request.dto';
-import { VerifyCodeResponseDto } from './dto/response/verify-code-response.dto';
+import { PhoneVerifyCodeRequestDto } from './dto/request/phone-verify-code-request.dto';
+import { PhoneVerifyCodeResponseDto } from './dto/response/phone-verify-code-response.dto';
 import { generateNumericToken } from '../../common/util';
 
 const VERIFY_CODE_VALID_TIME = 5;
@@ -16,8 +16,8 @@ export class PhoneVerifyService {
   ) {}
 
   async sendVerifyCode(
-    dto: VerifyCodeRequestDto,
-  ): Promise<VerifyCodeResponseDto> {
+    dto: PhoneVerifyCodeRequestDto,
+  ): Promise<PhoneVerifyCodeResponseDto> {
     const verifyCode = generateNumericToken();
 
     const expiredDate = new Date();
@@ -30,9 +30,11 @@ export class PhoneVerifyService {
 
     await this.phoneVerifyRepository.save(phoneVerify);
 
-    const response = new VerifyCodeResponseDto();
+    const response = new PhoneVerifyCodeResponseDto();
     response.code = verifyCode;
 
     return response;
   }
+
+  async verify() {}
 }
