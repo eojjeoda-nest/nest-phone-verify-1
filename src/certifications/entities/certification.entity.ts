@@ -1,21 +1,21 @@
 import {
-    Column,
-    CreateDateColumn,
-    Entity,
-    PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
 } from 'typeorm'
 
 @Entity()
 export class CertificationPhone {
-    @PrimaryGeneratedColumn()
-    id: number
+  @PrimaryGeneratedColumn()
+  id: number
 
-    @Column()
-    phoneNumber: string
+  @Column()
+  phoneNumber: string
 
-    @Column()
-    code: string
+  @Column()
+  code: string
 
-    @CreateDateColumn({ type: 'timestamp' })
-    createdAt: Date
+  @CreateDateColumn({ type: 'timestamp' })
+  createdAt: Date
 }
