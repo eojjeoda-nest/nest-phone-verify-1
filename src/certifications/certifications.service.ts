@@ -1,28 +1,48 @@
 import { Injectable } from '@nestjs/common'
-import {
-  CreateCertificationPhoneDto,
-  CertificationPhoneVerifyDto,
-} from './dto/certifications.dto'
 import { createResponse } from 'src/utils/createResponse'
+import { CreateCertificationPhoneRequestDto } from './dto/request/create-certification-phone-request.dto'
+import { createRandomCertificationCode } from 'src/utils/createRandomCertificationCode'
+import { CreateCertificationPhoneResponseDto } from './dto/response/create-certification-phone-response.dto'
+import { InjectRepository } from '@nestjs/typeorm'
+import { CertificationPhoneEntity } from './entities/certification.entity'
+import { Repository } from 'typeorm'
+import { ResponseDto } from 'src/common/dto/response.dto'
+
+const EXPIRED_TIME = 3 * 60 * 1000 // 3분
 
 @Injectable()
 export class CertificationsService {
-  create(createCertificationDto: CreateCertificationPhoneDto) {
-    // 인증번호를 발송하는 로직이 들어갈 예정
-    // 인증번호는 6자리의 숫자로 구성된 문자열
+  constructor(
+    @InjectRepository(CertificationPhoneEntity)
+    private certificationPhoneRepository: Repository<CertificationPhoneEntity>
+  ) {}
 
-    const code = '123456'
+  async create(
+    createCertificationPhoneRequest: CreateCertificationPhoneRequestDto
+  ): Promise<ResponseDto<CreateCertificationPhoneResponseDto>> {
+    const { phoneNumber } = createCertificationPhoneRequest
 
-    const { phoneNumber } = createCertificationDto
+    const certificationCode = createRandomCertificationCode()
 
-    const res: CertificationPhoneVerifyDto = {
-      code,
-      phoneNumber,
+    const certificationPhone = new CertificationPhoneEntity()
+    certificationPhone.phoneNumber = phoneNumber
+    certificationPhone.certificationCode = certificationCode
+    certificationPhone.expiredAt = new Date(Date.now() + EXPIRED_TIME)
+
+    try {
+      await this.certificationPhoneRepository.save(certificationPhone)
+    } catch (e) {
+      console.error(e)
     }
 
-    return createResponse<CertificationPhoneVerifyDto>(
-      '인증번호가 발송되었습니다.',
-      res
+    const data: CreateCertificationPhoneResponseDto = {
+      phoneNumber,
+      certificationCode,
+    }
+
+    return createResponse<CreateCertificationPhoneResponseDto>(
+      '인증번호가 성공적으로 발급되었습니다.',
+      data
     )
   }
 }

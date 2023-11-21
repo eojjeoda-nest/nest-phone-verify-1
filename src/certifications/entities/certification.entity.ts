@@ -1,12 +1,8 @@
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  PrimaryGeneratedColumn,
-} from 'typeorm'
+import { DateEntity } from 'src/common/entity/common.entity'
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
 
 @Entity()
-export class CertificationPhone {
+export class CertificationPhoneEntity extends DateEntity {
   @PrimaryGeneratedColumn()
   id: number
 
@@ -14,8 +10,12 @@ export class CertificationPhone {
   phoneNumber: string
 
   @Column()
-  code: string
+  certificationCode: string
 
-  @CreateDateColumn({ type: 'timestamp' })
-  createdAt: Date
+  //TODO: 유효시간 default 설정하기
+  @Column()
+  expiredAt: Date
+
+  @Column({ default: false })
+  isVerified: boolean
 }

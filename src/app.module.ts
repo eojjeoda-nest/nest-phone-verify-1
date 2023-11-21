@@ -8,6 +8,7 @@ import { CertificationsModule } from './certifications/certifications.module'
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
+
     TypeOrmModule.forRootAsync({
       useFactory() {
         return {
