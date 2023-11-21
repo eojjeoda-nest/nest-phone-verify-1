@@ -11,10 +11,6 @@ export class UsersService {
     private userRepository: Repository<User>,
   ) {}
 
-  findAll() {
-    return 'findAll';
-  }
-
   create(create: CreateUserDto) {
     const a = create;
     return 'fdsa';

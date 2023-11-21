@@ -3,15 +3,19 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { User } from './user.entity';
 
 @Entity({ name: 'AUTHCODE' })
-export class authCode {
+export class AuthCode {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
   @Column()
   codeNumber: string;
+  @ManyToOne(() => User, (user) => user.authCodes)
+  user: User;
   @CreateDateColumn({
     type: 'timestamp',
   })

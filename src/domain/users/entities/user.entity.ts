@@ -3,8 +3,10 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { AuthCode } from './auth-code.entity';
 
 @Entity({ name: 'USERS' })
 export class User {
@@ -12,6 +14,8 @@ export class User {
   id: number;
   @Column()
   phoneNumber: string;
+  @OneToMany(() => AuthCode, (authCode) => authCode.user)
+  authCodes: AuthCode[];
   @CreateDateColumn({
     type: 'timestamp',
   })
