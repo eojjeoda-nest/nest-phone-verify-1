@@ -12,7 +12,7 @@ export class CertificationPhoneEntity extends DateEntity {
   @Column()
   certificationCode: string
 
-  //TODO: 유효시간 default 설정하기
+  //TODO: 유효시간 default 설정하기 ? 아니면 서비스에서 설정하기 ?
   @Column()
   expiredAt: Date
 

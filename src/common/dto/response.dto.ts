@@ -1,4 +1,15 @@
-export class ResponseDto<T> {
+import { ApiProperty } from '@nestjs/swagger'
+
+export class ResponseDto {
+  @ApiProperty({
+    description: '응답 메세지',
+  })
   message: string
-  data?: T
+}
+
+export class ResponseWithDataDto<T> extends ResponseDto {
+  @ApiProperty({
+    description: '응답 데이터',
+  })
+  data: T
 }
