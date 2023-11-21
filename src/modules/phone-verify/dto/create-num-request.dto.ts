@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsString } from "class-validator";
+import { IsNotEmpty, IsString } from "class-validator";
 
 export class CreateNumberRequestDto {
     
@@ -8,5 +8,6 @@ export class CreateNumberRequestDto {
         description: '사용자 전화번호',
       })
     @IsString()
+    @IsNotEmpty()
     phoneNumber: string;
 }

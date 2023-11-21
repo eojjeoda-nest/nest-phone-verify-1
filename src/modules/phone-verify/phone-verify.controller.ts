@@ -19,7 +19,7 @@ export class PhoneVerifyController {
         description: '사용자가 본인의 핸드폰 번호를 입력하면 랜덤 6자리 숫자 문자열이 반환된다.'})
     @ApiResponse({
         status: 201,
-        description: '랜덤 6자리 숫자 문자열이 생성되었다.'
+        description: '랜덤 6자리 숫자 문자열이 생성된다.'
     })
     @Post()
     async sendVerifyNumber(
