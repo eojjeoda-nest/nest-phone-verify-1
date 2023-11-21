@@ -2,12 +2,15 @@ import { NestFactory } from '@nestjs/core'
 import { AppModule } from './app.module'
 import { initializeTransactionalContext } from 'typeorm-transactional'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
+import { ValidationPipe } from '@nestjs/common'
 
 async function bootstrap() {
   initializeTransactionalContext()
 
   const app = await NestFactory.create(AppModule)
   // TODO: 프로그램 구현
+  app.useGlobalPipes(new ValidationPipe({}))
+
   const config = new DocumentBuilder()
     .setTitle('JongHoon API')
     .setDescription('Phone Certifications API description')
