@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { PhoneVerify } from './entity/phoneVerify';
 import { Repository } from 'typeorm';
 import { PhoneVerifyMapper } from './mapper/phoneVerify.mapper';
+import { CheckNumberRequestDto } from './dto/check-num-request.dto';
 
 @Injectable()
 export class PhoneVerifyService {
@@ -38,10 +39,19 @@ export class PhoneVerifyService {
         }
     }
 
+// 고려사항) 1)  createAt과 updateAt이 같으면 updateAt과 현재시간 비교해서 5분 이내면 true 이상이면 false, 만약 다르면 updateAt으로 현재시간 비교해서 유효성 판단
+
+
+    // async checkVerifyNumber(checkNumberRequestDto: CheckNumberRequestDto): Promise<boolean> {
+    //     const isCodeExist = await this.phoneVerifyRepository.findOne{where: {}}
+
+    // }
+
     
 
     private getRandomNumber(): string {
-        const randomNumber = Math.floor(Math.random() * (999999-100000) + 100000);
-        return randomNumber.toString();
+
+        const randomNumber = Math.floor(Math.random() * 100000);
+        return randomNumber.toString().padStart(6, '0');
     }
 }
