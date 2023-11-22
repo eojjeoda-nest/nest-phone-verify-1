@@ -5,9 +5,7 @@ import {
 } from '@nestjs/common';
 import {
   ResponseWithDataJson,
-  ResponseWithOutDataJson,
   createResponseWithDataJson,
-  createResponseWithOutDataJson,
 } from 'src/utils/createResponse';
 import { CreateCertificationPhoneRequestDto } from './dto/request/create-certification-phone-request.dto';
 import { createRandomCertificationCode } from 'src/utils/createRandomCertificationCode';
@@ -16,7 +14,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CertificationPhoneEntity } from './entities/certification.entity';
 import { Repository } from 'typeorm';
 import { CheckCertificationCodeRequestDto } from './dto/request/check-certification_code-request.dto';
-import {} from './dto/response/check-certification_code-response.dto';
+import { CheckCertificationCodeResponseDto } from './dto/response/check-certification_code-response.dto';
 
 const EXPIRED_TIME = 3 * 60 * 1000; // 3분
 
@@ -58,7 +56,7 @@ export class CertificationsService {
 
   async check(
     checkCertificationCodeRequest: CheckCertificationCodeRequestDto
-  ): Promise<ResponseWithOutDataJson> {
+  ): Promise<ResponseWithDataJson<CheckCertificationCodeResponseDto>> {
     const { phoneNumber, certificationCode } = checkCertificationCodeRequest;
 
     const certificationPhone = await this.certificationPhoneRepository.findOne({
@@ -86,8 +84,13 @@ export class CertificationsService {
     certificationPhone.isVerified = true;
     await this.certificationPhoneRepository.save(certificationPhone);
 
-    return createResponseWithOutDataJson(
-      '인증번호가 성공적으로 확인되었습니다.'
+    const data: CheckCertificationCodeResponseDto = {
+      result: true,
+    };
+
+    return createResponseWithDataJson<CheckCertificationCodeResponseDto>(
+      '인증번호가 성공적으로 확인되었습니다.',
+      data
     );
   }
 }
