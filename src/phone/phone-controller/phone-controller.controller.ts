@@ -1,12 +1,11 @@
 import { Body, Controller, Post, HttpCode, HttpStatus, Get, Query, Param } from "@nestjs/common";
-import { ApiOperation, ApiBody, ApiResponse, ApiQuery, ApiParam } from "@nestjs/swagger";
+import { ApiOperation, ApiBody, ApiResponse, ApiQuery, ApiParam, ApiTags } from "@nestjs/swagger";
 import { VerifyCodeDto } from '../dto/VerifyCodeDto';
 import {PhoneService} from "../phone-service/phone-service.service";
 import {SendCodeDto} from "../dto/SendCodeDto";
-import { GetAllVerificationsDto } from "../dto/GetAllVerificationsDto";
 import { CheckCodeDto } from "../../notificaiton/dto/notificaiton-response.dto";
-
-@Controller('PhoneController')
+@ApiTags('Phone')
+@Controller('api/v1/Phone')
 export class PhoneController {
     constructor(private readonly phoneVerificationService: PhoneService) {}
 
