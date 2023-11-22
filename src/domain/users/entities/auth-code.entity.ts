@@ -13,7 +13,7 @@ export class AuthCode {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
   @Column()
-  codeNumber: string;
+  code: string;
   @ManyToOne(() => User, (user) => user.authCodes)
   user: User;
   @CreateDateColumn({

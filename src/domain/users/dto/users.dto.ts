@@ -1,7 +1,14 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsString, MinLength } from 'class-validator';
+import { Expose } from 'class-transformer';
 
 export class CreateUserDto {
   @IsString()
   @IsNotEmpty()
-  phoneNumber: string;
+  readonly phoneNumber: string;
+}
+
+export class ResponseUserDto {
+  @Expose()
+  @MinLength(6)
+  code: string;
 }
