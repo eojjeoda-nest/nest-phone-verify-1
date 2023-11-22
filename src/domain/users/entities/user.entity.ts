@@ -1,18 +1,15 @@
 import {
-  Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
   OneToMany,
-  PrimaryGeneratedColumn,
+  PrimaryColumn,
 } from 'typeorm';
 import { AuthCode } from './auth-code.entity';
 
 @Entity({ name: 'USERS' })
 export class User {
-  @PrimaryGeneratedColumn({ name: 'id' })
-  id: number;
-  @Column()
+  @PrimaryColumn()
   phoneNumber: string;
   @OneToMany(() => AuthCode, (authCode) => authCode.user)
   authCodes: AuthCode[];
