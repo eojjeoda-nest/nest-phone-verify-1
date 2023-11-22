@@ -1,17 +1,21 @@
-import { Body, Controller, Patch, Post } from '@nestjs/common'
-import { CertificationsService } from './certifications.service'
+import { Body, Controller, Patch, Post } from '@nestjs/common';
+import { CertificationsService } from './certifications.service';
 
 import {
+  ApiBadRequestResponse,
   ApiBody,
   ApiCreatedResponse,
+  ApiOkResponse,
   ApiOperation,
   ApiTags,
-} from '@nestjs/swagger'
-import { CreateCertificationPhoneRequestDto } from './dto/request/create-certification-phone-request.dto'
-import { CreateCertificationPhoneResponseDto } from './dto/response/create-certification-phone-response.dto'
-import { ResponseWithDataDto } from 'src/common/dto/response.dto'
-import { CheckCertificationCodeRequestDto } from './dto/request/check-certification_code-request.dto'
-import { CheckCertificationCodeResponseDto } from './dto/response/check-certification_code-response.dto'
+} from '@nestjs/swagger';
+import { CreateCertificationPhoneRequestDto } from './dto/request/create-certification-phone-request.dto';
+import { CreateCertificationPhoneResponseDto } from './dto/response/create-certification-phone-response.dto';
+import { CheckCertificationCodeRequestDto } from './dto/request/check-certification_code-request.dto';
+import {
+  ResponseWithDataJson,
+  ResponseWithOutDataJson,
+} from 'src/utils/createResponse';
 
 @Controller('api/v1/certifications')
 @ApiTags('phone-certifications')
@@ -31,23 +35,35 @@ export class CertificationsController {
       },
     },
   })
-  @ApiCreatedResponse({
+  @ApiOkResponse({
     description: '인증번호 발급 성공',
     schema: {
       example: {
-        message: '인증번호가 성공적으로 발급되었습니다.',
+        statusCode: 201,
+        message: ['인증번호가 성공적으로 발급되었습니다.'],
         data: {
           phoneNumber: '01092274072',
           certificationCode: '990209',
         },
+        timestamp: '2021-09-06T08:40:00.000Z',
+      },
+    },
+  })
+  @ApiBadRequestResponse({
+    description: '인증번호 발급 실패',
+    schema: {
+      example: {
+        statusCode: 400,
+        message: ['11자리의 휴대폰 번호를 입력해주세요.'],
+        timestamp: '2021-09-06T08:40:00.000Z',
       },
     },
   })
   create(
     @Body()
     createCertificationPhoneRequest: CreateCertificationPhoneRequestDto
-  ): Promise<ResponseWithDataDto<CreateCertificationPhoneResponseDto>> {
-    return this.certificationsService.create(createCertificationPhoneRequest)
+  ): Promise<ResponseWithDataJson<CreateCertificationPhoneResponseDto>> {
+    return this.certificationsService.create(createCertificationPhoneRequest);
   }
 
   @Patch('phone')
@@ -77,7 +93,7 @@ export class CertificationsController {
   })
   check(
     @Body() checkCertificationCodeRequest: CheckCertificationCodeRequestDto
-  ): Promise<ResponseWithDataDto<CheckCertificationCodeResponseDto>> {
-    return this.certificationsService.check(checkCertificationCodeRequest)
+  ): Promise<ResponseWithOutDataJson> {
+    return this.certificationsService.check(checkCertificationCodeRequest);
   }
 }

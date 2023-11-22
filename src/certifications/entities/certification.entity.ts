@@ -1,21 +1,21 @@
-import { DateEntity } from 'src/common/entity/common.entity'
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
+import { DateEntity } from 'src/common/entity/common.entity';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class CertificationPhoneEntity extends DateEntity {
   @PrimaryGeneratedColumn()
-  id: number
+  id: number;
 
   @Column()
-  phoneNumber: string
+  phoneNumber: string;
 
   @Column()
-  certificationCode: string
+  certificationCode: string;
 
   //TODO: 유효시간 default 설정하기 ? 아니면 서비스에서 설정하기 ?
   @Column()
-  expiredAt: Date
+  expireAt: Date;
 
   @Column({ default: false })
-  isVerified: boolean
+  isVerified: boolean;
 }

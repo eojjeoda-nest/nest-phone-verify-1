@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger'
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CheckCertificationCodeResponseDto {
   @ApiProperty({
@@ -13,7 +13,7 @@ export class CheckCertificationCodeResponseDto {
     `,
     example: 'SUCCESS',
   })
-  certificationCodeStatus: CheckCertificationCodeStatus
+  certificationCodeStatus: CheckCertificationCodeStatus;
 }
 
 export const CHECK_CERTIFICATION_CODE_STATUS = {
@@ -22,7 +22,7 @@ export const CHECK_CERTIFICATION_CODE_STATUS = {
   INVALID: 'INVALID',
   ALREADY_VERIFIED: 'ALREADY_VERIFIED',
   NOT_FOUND: 'NOT_FOUND',
-} as const
+} as const;
 
 export type CheckCertificationCodeStatus =
-  (typeof CHECK_CERTIFICATION_CODE_STATUS)[keyof typeof CHECK_CERTIFICATION_CODE_STATUS]
+  (typeof CHECK_CERTIFICATION_CODE_STATUS)[keyof typeof CHECK_CERTIFICATION_CODE_STATUS];

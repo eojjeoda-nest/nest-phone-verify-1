@@ -1,12 +1,22 @@
-import { ResponseDto, ResponseWithDataDto } from 'src/common/dto/response.dto'
+export type ResponseWithOutDataJson = {
+  message: string | string[];
+};
 
-export function createResponseDto(message: string): ResponseDto {
-  return { message }
+export type ResponseWithDataJson<T> = ResponseWithOutDataJson & { data: T };
+
+export function createResponseWithOutDataJson(
+  message: string | string[]
+): ResponseWithOutDataJson {
+  message = typeof message === 'string' ? [message] : message;
+
+  return { message };
 }
 
-export function createResponseWithDataDto<T>(
-  message: string,
+export function createResponseWithDataJson<T>(
+  message: string | string[],
   data: T
-): ResponseWithDataDto<T> {
-  return { message, data }
+): ResponseWithDataJson<T> {
+  message = typeof message === 'string' ? [message] : message;
+
+  return { message, data };
 }
