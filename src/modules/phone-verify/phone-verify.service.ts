@@ -44,7 +44,7 @@ export class PhoneVerifyService {
 
     async checkVerifyNumber(checkNumberRequestDto: CheckNumberRequestDto): Promise<boolean> {
         const {phoneNumber, code}= checkNumberRequestDto;
-        const expireTime = 5*60*1000;
+        const EXPIRETIME = 5*60*1000;
         // 코드와 전화번호 둘 다 만족한 정보 찾기
         const isCodeExist = await this.phoneVerifyRepository.createQueryBuilder()
             .where('phoneNumber =:phoneNumber', {phoneNumber: phoneNumber})
@@ -57,9 +57,9 @@ export class PhoneVerifyService {
             const updateAt = new Date(isCodeExist.updateAt);
             
             if(createAt.getTime() == updateAt.getTime()){
-                return now.getTime() - createAt.getTime() <= expireTime;
+                return now.getTime() - createAt.getTime() <= EXPIRETIME;
             } else{
-                return now.getTime() - updateAt.getTime() <= expireTime;
+                return now.getTime() - updateAt.getTime() <= EXPIRETIME;
             }
         }
         return false;
@@ -67,8 +67,8 @@ export class PhoneVerifyService {
 
 
     private getRandomNumber(): string {
-
+        const CODE_LENGTH = 6;
         const randomNumber = Math.floor(Math.random() * 100000);
-        return randomNumber.toString().padStart(6, '0');
+        return randomNumber.toString().padStart(CODE_LENGTH, '0');
     }
 }
