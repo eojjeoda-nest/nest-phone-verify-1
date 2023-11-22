@@ -50,13 +50,13 @@ export class PhoneVerifyService {
             .where('phoneNumber =:phoneNumber', {phoneNumber: phoneNumber})
             .andWhere('code =:code', {code: code})
             .getOne();
-        
+
         if(isCodeExist){
             const now = new Date();
             const createAt = new Date(isCodeExist.createAt);
             const updateAt = new Date(isCodeExist.updateAt);
             
-            if(createAt.getTime() == updateAt.getTime()){
+            if(createAt.getTime() === updateAt.getTime()){
                 return now.getTime() - createAt.getTime() <= EXPIRETIME;
             } else{
                 return now.getTime() - updateAt.getTime() <= EXPIRETIME;
