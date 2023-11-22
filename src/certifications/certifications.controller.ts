@@ -4,7 +4,6 @@ import { CertificationsService } from './certifications.service';
 import {
   ApiBadRequestResponse,
   ApiBody,
-  ApiCreatedResponse,
   ApiOkResponse,
   ApiOperation,
   ApiTags,
@@ -80,14 +79,16 @@ export class CertificationsController {
       },
     },
   })
-  @ApiCreatedResponse({
+  @ApiOkResponse({
     description: '인증번호 확인 성공',
     schema: {
       example: {
-        message: '인증번호가 성공적으로 확인되었습니다.',
+        statusCode: 200,
+        message: ['인증번호가 성공적으로 확인되었습니다.'],
         data: {
-          status: 'SUCCESS',
+          result: true,
         },
+        timestamp: '2023-11-22T18:07:08.092Z',
       },
     },
   })
