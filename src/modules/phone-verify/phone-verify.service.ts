@@ -42,12 +42,29 @@ export class PhoneVerifyService {
 // 고려사항) 1)  createAt과 updateAt이 같으면 updateAt과 현재시간 비교해서 5분 이내면 true 이상이면 false, 만약 다르면 updateAt으로 현재시간 비교해서 유효성 판단
 
 
-    // async checkVerifyNumber(checkNumberRequestDto: CheckNumberRequestDto): Promise<boolean> {
-    //     const isCodeExist = await this.phoneVerifyRepository.findOne{where: {}}
+    async checkVerifyNumber(checkNumberRequestDto: CheckNumberRequestDto): Promise<boolean> {
+        const {phoneNumber, code}= checkNumberRequestDto;
+        const expireTime = 5*60*1000;
+        // 코드와 전화번호 둘 다 만족한 정보 찾기
+        const isCodeExist = await this.phoneVerifyRepository.createQueryBuilder()
+            .where('phoneNumber =:phoneNumber', {phoneNumber: phoneNumber})
+            .andWhere('code =:code', {code: code})
+            .getOne();
+        
+        if(isCodeExist){
+            const now = new Date();
+            const createAt = new Date(isCodeExist.createAt);
+            const updateAt = new Date(isCodeExist.updateAt);
+            
+            if(createAt.getTime() == updateAt.getTime()){
+                return now.getTime() - createAt.getTime() <= expireTime;
+            } else{
+                return now.getTime() - updateAt.getTime() <= expireTime;
+            }
+        }
+        return false;
+    }
 
-    // }
-
-    
 
     private getRandomNumber(): string {
 

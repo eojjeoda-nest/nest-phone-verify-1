@@ -2,6 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { CreateNumberRequestDto } from "../dto/create-num-request.dto";
 import { PhoneVerify } from "../entity/phoneVerify";
 import { CreateNumberResponseDto } from "../dto/create-num-response.dto";
+import { CheckNumberResponseDto } from "../dto/check-num-response.dto";
 
 @Injectable()
 export class PhoneVerifyMapper {
@@ -21,10 +22,18 @@ export class PhoneVerifyMapper {
         return isPhoneNumExist;
     }
 
-    entityToDto(randomNumber: PhoneVerify): CreateNumberResponseDto{
+    createEntityToDto(randomNumber: PhoneVerify): CreateNumberResponseDto{
         return{
             code: randomNumber.code
         };
     }
+
+    checkEntityToDto(result: boolean): CheckNumberResponseDto{
+        return{
+            result: result
+        }
+    }
+
+
 }
 
