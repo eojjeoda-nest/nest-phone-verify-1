@@ -3,6 +3,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { addTransactionalDataSource } from 'typeorm-transactional';
 import { DataSource } from 'typeorm';
+import { PhoneController } from './phone/phone-controller/phone-controller.controller';
+import {PhoneService} from './phone/phone-service/phone-service.service';
 
 @Module({
   imports: [
@@ -29,7 +31,7 @@ import { DataSource } from 'typeorm';
       },
     }),
   ],
-  controllers: [],
-  providers: [],
+  controllers: [PhoneController],
+  providers: [PhoneService],
 })
 export class AppModule {}
