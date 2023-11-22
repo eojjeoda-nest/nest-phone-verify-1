@@ -2,52 +2,32 @@ import { Injectable } from '@nestjs/common';
 import { PhoneVerification } from '../entity/PhoneVerification';
 import {  VerifyCodeDto } from '../dto/VerifyCodeDto';
 import {SendCodeDto} from "../dto/SendCodeDto";
-import { CheckCodeDto } from "../../notificaiton/dto/notificaiton-response.dto";
+import { TitleNullException } from "../exception/TitleNullException";
 
 @Injectable()
 export class PhoneService {
     private readonly verifications: PhoneVerification[] = [];
     private readonly waitingClients: Map<string, (isValid: boolean) => void> = new Map();
-    sendCode(sendCodeDto: SendCodeDto): any {
-        const verificationCode = Math.floor(100000 + Math.random() * 900000); // 6자리 랜덤 숫자 생성
-        const expirationTime = new Date();
-        expirationTime.setMinutes(expirationTime.getMinutes() + 5); // 현재 시간으로부터 5분 후
 
-        const verification: PhoneVerification = {
+    //인증 코드 생성
+    sendCode(sendCodeDto: SendCodeDto): any {
+
+        //만약 전화번호 작성하지 않았으면
+        if (!sendCodeDto.phoneNumber) {
+            throw new TitleNullException();
+        }
+        const verificationCode = Math.floor(100000 + Math.random() * 900000); // 6자리 랜덤 숫자 생성
+
+        const verification: PhoneVerification = { //매핑
             phoneNumber: sendCodeDto.phoneNumber,
             code: verificationCode.toString(),
-            timestamp: expirationTime, // 여기를 수정
         };
 
         this.verifications.push(verification);
         return { code: verificationCode };
     }
 
-
-
-    verifyCode(phoneNumber: string, code: string): Promise<boolean> {
-        return new Promise((resolve, reject) => {
-            const timer = setTimeout(() => {
-                resolve(false); // 5분 후 false 반환
-            }, 300000); // 5분
-
-            this.waitForCodeVerification(phoneNumber, code, resolve, timer);
-        });
-    }
-
-    private waitForCodeVerification(phoneNumber: string, code: string, resolve: (value: boolean) => void, timer: NodeJS.Timeout) {
-        const checkVerification = () => {
-            const verification = this.verifications.find(v => v.phoneNumber === phoneNumber && v.code === code);
-            if (verification) {
-                clearTimeout(timer);
-                resolve(true);
-            } else {
-                setTimeout(checkVerification, 5000); // 5초마다 확인
-            }
-        };
-        checkVerification();
-    }
-
+    //모든 전화번호와 코드 확인
     getAllVerifications(): VerifyCodeDto[] {
         return this.verifications.map(verification => ({
             phoneNumber: verification.phoneNumber,
@@ -55,12 +35,23 @@ export class PhoneService {
         }));
     }
 
+    //휴대전화 인증 시작
     startVerification(phoneNumber: string): Promise<boolean> {
-        return new Promise<boolean>((resolve) => {
-            this.waitingClients.set(phoneNumber, resolve);
+        return new Promise<boolean>((resolve, reject) => {
+            const timer = setTimeout(() => {
+                this.waitingClients.delete(phoneNumber);
+                reject(new Error('Verification timed out')); // 5분 후 타임아웃 에러 반환
+            }, 300000); // 5분
+
+            this.waitingClients.set(phoneNumber, (isValid) => {
+                clearTimeout(timer);
+                resolve(isValid);
+            });
         });
     }
 
+
+    //인증 코드 확인
     checkCode(code: string): boolean {
         let isValid = false;
         this.verifications.forEach((verification) => {
@@ -75,7 +66,4 @@ export class PhoneService {
         });
         return isValid; // 코드 검증 결과 반환
     }
-
-
-
 }
