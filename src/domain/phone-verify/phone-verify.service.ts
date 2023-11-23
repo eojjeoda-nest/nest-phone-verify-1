@@ -5,6 +5,8 @@ import { Repository } from 'typeorm';
 import { PhoneVerifyCodeRequestDto } from './dto/request/phone-verify-code-request.dto';
 import { PhoneVerifyCodeResponseDto } from './dto/response/phone-verify-code-response.dto';
 import { generateNumericToken } from '../../common/util';
+import { PhoneVerifyRequestDto } from './dto/request/phone-verify-request.dto';
+import { PhoneVerifyResponseDto } from './dto/response/phone-verify-response.dto';
 
 const VERIFY_CODE_VALID_TIME = 5;
 
@@ -36,5 +38,25 @@ export class PhoneVerifyService {
     return response;
   }
 
-  async verify() {}
+  async verify(dto: PhoneVerifyRequestDto) {
+    const phoneVerification = await this.phoneVerifyRepository
+      .createQueryBuilder('pv')
+      .where('pv.phoneNumber = :phoneNumber', { phoneNumber: dto.phoneNumber })
+      .andWhere('pv.verifyCode = :verifyCode', { verifyCode: dto.verifyCode })
+      .andWhere('pv.isVerified = false')
+      .andWhere('pv.expiredAt > NOW()')
+      .orderBy({ createdAt: 'DESC' })
+      .getOne();
+
+    phoneVerification.isVerified = true;
+
+    if (!phoneVerification) {
+      // TODO: 예외처리
+    }
+
+    const response = new PhoneVerifyResponseDto();
+    response.result = true;
+
+    return response;
+  }
 }
