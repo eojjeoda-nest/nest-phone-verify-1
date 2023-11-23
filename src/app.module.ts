@@ -5,6 +5,7 @@ import { addTransactionalDataSource } from 'typeorm-transactional';
 import { DataSource } from 'typeorm';
 import { PhoneVerifyModule } from './domain/phone-verify/phone-verify.module';
 import { PhoneVerifyController } from './apps/phone-verify/phone-verify.controller';
+import { PhoneVerify } from './domain/phone-verify/phone-verify.entity';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { PhoneVerifyController } from './apps/phone-verify/phone-verify.controll
         return addTransactionalDataSource(new DataSource(options));
       },
     }),
+    TypeOrmModule.forFeature([PhoneVerify]),
     PhoneVerifyModule,
   ],
   controllers: [PhoneVerifyController],
