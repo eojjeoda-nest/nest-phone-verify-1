@@ -19,20 +19,13 @@ export class PhoneController {
         return this.phoneVerificationService.sendCode(sendCodeDto);
     }
 
-    @Get('/start-verification/:phoneNumber')
-    @ApiOperation({ summary: '휴대전화 인증 시작', description: '주어진 휴대전화 번호에 대한 인증 절차를 시작합니다.' })
-    @ApiParam({ name: 'phoneNumber', type: String, description: '인증을 시작할 휴대전화 번호' })
-    @ApiResponse({ status: 200, description: '인증 절차 시작됨', type: Boolean })
-    startVerification(@Param('phoneNumber') phoneNumber: string): Promise<boolean> {
-        return this.phoneVerificationService.startVerification(phoneNumber);
-    }
-
-    @Post('/check-code')
-    @ApiOperation({ summary: '인증 코드 확인', description: '제공된 인증 코드의 유효성을 검증합니다.' })
-    @ApiBody({ type: CheckCodeDto }) // CheckCodeDto는 인증 코드만 포함
+    @Post('/check-code/:phoneNumber')
+    @ApiOperation({ summary: '인증 코드 확인', description: '제공된 전화번호에 대한 인증 코드의 유효성을 검증합니다.' })
+    @ApiBody({ type: CheckCodeDto })
+    @ApiParam({ name: 'phoneNumber', required: true, type: String, description: '전화번호' })
     @ApiResponse({ status: 200, description: '인증 코드 검증 결과', type: Boolean })
-    checkCode(@Body() checkCodeDto: CheckCodeDto): boolean {
-        return this.phoneVerificationService.checkCode(checkCodeDto.code);
+    checkCode(@Param('phoneNumber') phoneNumber: string, @Body() checkCodeDto: CheckCodeDto): { success: boolean, message: string } {
+        return this.phoneVerificationService.checkCode(phoneNumber, checkCodeDto.code);
     }
 
 

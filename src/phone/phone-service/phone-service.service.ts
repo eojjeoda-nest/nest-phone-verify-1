@@ -3,6 +3,8 @@ import { PhoneVerification } from '../entity/PhoneVerification';
 import {  VerifyCodeDto } from '../dto/VerifyCodeDto';
 import {SendCodeDto} from "../dto/SendCodeDto";
 import { TitleNullException } from "../exception/TitleNullException";
+import { CodeNotFound } from "../exception/CodeNotFound";
+import { TimeOver } from "../exception/TimeOver";
 
 @Injectable()
 export class PhoneService {
@@ -21,6 +23,7 @@ export class PhoneService {
         const verification: PhoneVerification = { //매핑
             phoneNumber: sendCodeDto.phoneNumber,
             code: verificationCode.toString(),
+            timestamp: new Date()
         };
 
         this.verifications.push(verification);
@@ -35,35 +38,26 @@ export class PhoneService {
         }));
     }
 
-    //휴대전화 인증 시작
-    startVerification(phoneNumber: string): Promise<boolean> {
-        return new Promise<boolean>((resolve, reject) => {
-            const timer = setTimeout(() => {
-                this.waitingClients.delete(phoneNumber);
-                reject(new Error('Verification timed out')); // 5분 후 타임아웃 에러 반환
-            }, 300000); // 5분
 
-            this.waitingClients.set(phoneNumber, (isValid) => {
-                clearTimeout(timer);
-                resolve(isValid);
-            });
-        });
-    }
+    // 인증 코드 확인
+    checkCode(phoneNumber: string, code: string): { success: boolean, message: string } {
+        const currentTime = new Date(); // 현재 시간
 
+        for (const verification of this.verifications) {
+            if (verification.phoneNumber === phoneNumber && verification.code === code) {
+                // 인증번호의 생성 시간과 현재 시간의 차이가 5분 이내인지 확인
+                const timeDiff = (currentTime.getTime() - verification.timestamp.getTime()) / 60000; // 분 단위로 변환
 
-    //인증 코드 확인
-    checkCode(code: string): boolean {
-        let isValid = false;
-        this.verifications.forEach((verification) => {
-            if (verification.code === code) {
-                const resolve = this.waitingClients.get(verification.phoneNumber);
-                if (resolve) {
-                    resolve(true); // 인증 코드가 유효하면 true로 Long Polling 완료
-                    isValid = true;
+                if (timeDiff <= 5) { // 5분 이내이면 유효
+                    this.waitingClients.delete(verification.phoneNumber);
+                    return { success: true, message: "인증 성공" }; // 인증 성공
+                } else {
+                    // 5분 초과 시
+                    throw new TimeOver();// 코드 유효시간이 지나면 TimeOver 예외 발생
                 }
-                this.waitingClients.delete(verification.phoneNumber);
             }
-        });
-        return isValid; // 코드 검증 결과 반환
+        }
+        // 일치하는 코드가 없으면 CodeNotFound 예외 발생
+        throw new CodeNotFound();
     }
 }
