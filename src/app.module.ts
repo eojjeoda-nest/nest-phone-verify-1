@@ -1,9 +1,9 @@
-import { Module } from '@nestjs/common'
-import { TypeOrmModule } from '@nestjs/typeorm'
-import { ConfigModule } from '@nestjs/config'
-import { addTransactionalDataSource } from 'typeorm-transactional'
-import { DataSource } from 'typeorm'
-import { CertificationsModule } from './certifications/certifications.module'
+import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule } from '@nestjs/config';
+import { addTransactionalDataSource } from 'typeorm-transactional';
+import { DataSource } from 'typeorm';
+import { CertificationsModule } from './certifications/module/certifications.module';
 
 @Module({
   imports: [
@@ -23,14 +23,14 @@ import { CertificationsModule } from './certifications/certifications.module'
           migrations: [__dirname + '/migrations//*{.ts,.js}'],
           migrationsRun: false,
           timezone: 'Z',
-        }
+        };
       },
       async dataSourceFactory(options) {
         if (!options) {
-          throw new Error('Invalid options passed')
+          throw new Error('Invalid options passed');
         }
 
-        return addTransactionalDataSource(new DataSource(options))
+        return addTransactionalDataSource(new DataSource(options));
       },
     }),
     CertificationsModule,

@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, Matches, MaxLength, MinLength } from 'class-validator';
-import { CODE_LENGTH } from 'src/utils/createRandomCertificationCode';
+import { CODE_LENGTH } from 'src/certifications/utils/createRandomCertificationCode';
 
 export class CheckCertificationCodeRequestDto {
   @ApiProperty({

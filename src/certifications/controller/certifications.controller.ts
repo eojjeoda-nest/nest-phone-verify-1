@@ -1,5 +1,5 @@
 import { Body, Controller, Patch, Post } from '@nestjs/common';
-import { CertificationsService } from './certifications.service';
+import { CertificationsService } from '../service/certifications.service';
 
 import {
   ApiBadRequestResponse,
@@ -8,13 +8,13 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { CreateCertificationPhoneRequestDto } from './dto/request/create-certification-phone-request.dto';
-import { CreateCertificationPhoneResponseDto } from './dto/response/create-certification-phone-response.dto';
-import { CheckCertificationCodeRequestDto } from './dto/request/check-certification_code-request.dto';
+import { CreateCertificationPhoneRequestDto } from '../dto/request/create-certification-phone-request.dto';
+import { CreateCertificationPhoneResponseDto } from '../dto/response/create-certification-phone-response.dto';
+import { CheckCertificationCodeRequestDto } from '../dto/request/check-certification_code-request.dto';
 import {
   ResponseWithDataJson,
   ResponseWithOutDataJson,
-} from 'src/utils/createResponse';
+} from 'src/common/utils/createResponse';
 
 @Controller('api/v1/certifications')
 @ApiTags('phone-certifications')
