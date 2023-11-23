@@ -38,9 +38,23 @@ export class CertificationsService {
     certificationPhone.expireAt = new Date(Date.now() + EXPIRED_TIME);
 
     try {
+      // 이미 존재하는 핸드폰 번호이면 soft delete 를 한다.
+      const existCertificationPhone =
+        await this.certificationPhoneRepository.findOne({
+          where: {
+            phoneNumber,
+          },
+        });
+
+      if (existCertificationPhone) {
+        await this.certificationPhoneRepository.softDelete(
+          existCertificationPhone.id
+        );
+      }
+
       await this.certificationPhoneRepository.save(certificationPhone);
     } catch (e) {
-      console.error(e);
+      throw new BadRequestException('인증번호 발급에 실패하였습니다.');
     }
 
     const data: CreateCertificationPhoneResponseDto = {
@@ -69,7 +83,7 @@ export class CertificationsService {
     });
 
     if (!certificationPhone) {
-      throw new NotFoundException('인증번호가 존재하지 않습니다.');
+      throw new NotFoundException('핸드폰 번호가 존재하지 않습니다.');
     } else if (certificationPhone.expireAt < new Date()) {
       throw new BadRequestException('인증번호가 만료되었습니다.');
     } else if (certificationPhone.certificationCode !== certificationCode) {
