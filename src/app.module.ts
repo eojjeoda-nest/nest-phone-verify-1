@@ -4,7 +4,6 @@ import { ConfigModule } from '@nestjs/config';
 import { addTransactionalDataSource } from 'typeorm-transactional';
 import { DataSource } from 'typeorm';
 import { PhoneVerifyModule } from './domain/phone-verify/phone-verify.module';
-import { PhoneVerify } from './domain/phone-verify/phone-verify.entity';
 import { PhoneVerifyController } from './apps/phone-verify/phone-verify.controller';
 
 @Module({
