@@ -30,7 +30,6 @@ import { PhoneVerifyController } from './apps/phone-verify/phone-verify.controll
         return addTransactionalDataSource(new DataSource(options));
       },
     }),
-    TypeOrmModule.forFeature([PhoneVerify]),
     PhoneVerifyModule,
   ],
   controllers: [PhoneVerifyController],
