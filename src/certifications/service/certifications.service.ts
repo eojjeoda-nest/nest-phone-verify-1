@@ -38,7 +38,6 @@ export class CertificationsService {
     certificationPhone.expireAt = new Date(Date.now() + EXPIRED_TIME);
 
     try {
-      // 이미 존재하는 핸드폰 번호이면 soft delete 를 한다.
       const existCertificationPhone =
         await this.certificationPhoneRepository.findOne({
           where: {
@@ -51,10 +50,14 @@ export class CertificationsService {
           existCertificationPhone.id
         );
       }
+    } catch (e) {
+      throw new BadRequestException('DB 데이터 삭제에 실패하였습니다.');
+    }
 
+    try {
       await this.certificationPhoneRepository.save(certificationPhone);
     } catch (e) {
-      throw new BadRequestException('인증번호 발급에 실패하였습니다.');
+      throw new BadRequestException('DB 데이터 저장에 실패하였습니다.');
     }
 
     const data: CreateCertificationPhoneResponseDto = {
