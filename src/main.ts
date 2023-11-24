@@ -11,10 +11,10 @@ async function bootstrap() {
 
   
   const config = new DocumentBuilder()
-    .setTitle('Cats example')
-    .setDescription('The cats API description')
+    .setTitle('핸드폰 인증')
+    .setDescription('핸드폰 인증 API 문서')
     .setVersion('1.0')
-    .addTag('cats')
+    .addTag('phone')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);

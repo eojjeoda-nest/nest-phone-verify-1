@@ -1,7 +1,13 @@
-import { IsEmail,IsNotEmpty,IsString } from "class-validator";
+import { IsNotEmpty, IsString } from 'class-validator';
 
-export class CodeRequestDto {
+export class CodeResponseDto {
   @IsString()
   @IsNotEmpty()
   code: string;
+
+  constructor(code: string) {
+    this.code = code;
+
+}
+
 }
