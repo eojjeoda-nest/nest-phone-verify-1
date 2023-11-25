@@ -7,8 +7,6 @@ import { PhoneVerifyCodeResponseDto } from './dto/response/phone-verify-code-res
 import { generateNumericToken } from '../../common/util';
 import { PhoneVerifyRequestDto } from './dto/request/phone-verify-request.dto';
 import { PhoneVerifyResponseDto } from './dto/response/phone-verify-response.dto';
-import { AuthFailedException } from '../../common/error';
-import { Messages } from '../../common/constant';
 
 const VERIFY_CODE_VALID_TIME = 5;
 
@@ -50,15 +48,15 @@ export class PhoneVerifyService {
       .orderBy({ createdAt: 'DESC' })
       .getOne();
 
-    phoneVerification.isVerified = true;
-
+    const response = new PhoneVerifyResponseDto();
     if (!phoneVerification) {
-      throw new AuthFailedException(Messages.ERROR_AUTH_FAIL);
+      response.result = false;
+      return response;
     }
 
-    const response = new PhoneVerifyResponseDto();
+    phoneVerification.isVerified = true;
+    await this.phoneVerifyRepository.save(phoneVerification);
     response.result = true;
-
     return response;
   }
 }

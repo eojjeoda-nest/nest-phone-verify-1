@@ -7,5 +7,6 @@ export class PhoneVerifyRequestDto {
   phoneNumber: string;
 
   @IsString()
+  @Matches(validator.VERIFY_CODE_REGEX)
   verifyCode: string;
 }

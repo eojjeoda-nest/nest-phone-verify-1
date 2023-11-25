@@ -22,6 +22,7 @@ import { HttpExceptionFilter } from './common/error/http-exception.filter';
           password: process.env.DB_PASSWORD,
           database: process.env.DB_DATABASE,
           synchronize: process.env.DB_SYNC === 'true',
+          entities: [PhoneVerify],
           timezone: 'Z',
         };
       },
