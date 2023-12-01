@@ -18,12 +18,6 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
-
-  // TODO: 프로그램 구현
-  await app.listen(process.env.PORT || 8000);
-
-  console.log(`Application is running on: ${await app.getUrl()}`);
-
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -31,6 +25,13 @@ async function bootstrap() {
       transform: true,
     }),
   )
+
+  // TODO: 프로그램 구현
+  await app.listen(process.env.PORT || 8000);
+
+  console.log(`Application is running on: ${await app.getUrl()}`);
+
+  
 
 }
 

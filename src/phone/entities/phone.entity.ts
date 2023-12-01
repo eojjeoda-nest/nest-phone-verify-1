@@ -10,8 +10,8 @@ export class Phone {
   @Column()
   code: string;
 
-  @Column({ default: false })
-  isVerified: boolean;
+  // @Column()
+  // isVerified: boolean;
 
   @Column()
   createdAt: string;
