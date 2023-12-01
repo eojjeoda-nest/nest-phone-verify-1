@@ -3,6 +3,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { addTransactionalDataSource } from 'typeorm-transactional';
 import { DataSource } from 'typeorm';
+import { PhoneModule } from './phone/phone.module';
+import { Phone } from './phone/entities/phone.entity';
 
 @Module({
   imports: [
@@ -11,11 +13,12 @@ import { DataSource } from 'typeorm';
       useFactory() {
         return {
           type: 'mysql',
-          host: process.env.DB_HOST,
+          host: process.env.DB_HOST, 
           port: parseInt(process.env.DB_PORT),
           username: process.env.DB_USERNAME,
           password: process.env.DB_PASSWORD,
           database: process.env.DB_DATABASE,
+          entities: [Phone],
           synchronize: process.env.DB_SYNC === 'true',
           timezone: 'Z',
         };
@@ -28,6 +31,7 @@ import { DataSource } from 'typeorm';
         return addTransactionalDataSource(new DataSource(options));
       },
     }),
+    PhoneModule,
   ],
   controllers: [],
   providers: [],
