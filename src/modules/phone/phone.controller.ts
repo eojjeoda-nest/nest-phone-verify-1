@@ -15,11 +15,7 @@ export class PhoneController {
   @ApiBody({ type: SendCodeDto })
   async sendCode(@Body() sendCodeDto: SendCodeDto) {
     const { phoneNumber } = sendCodeDto;
-    try {
-      return await this.phoneService.sendCode(phoneNumber);
-    } catch (error) {
-      throw new BadRequestException(error.message);
-    }
+    return await this.phoneService.sendCode(phoneNumber);
   }
 
   @Post('/verify-code')
@@ -28,11 +24,6 @@ export class PhoneController {
   @ApiBody({ type: VerifyCodeDto })
   async verifyCode(@Body() verifyCodeDto: VerifyCodeDto) {
     const { phoneNumber, code } = verifyCodeDto;
-    try {
-      const result = await this.phoneService.verifyCode(phoneNumber, code);
-      return result;
-    } catch (error) {
-      throw new BadRequestException(error.message);
-    }
+    return await this.phoneService.verifyCode(phoneNumber, code);
   }
 }
