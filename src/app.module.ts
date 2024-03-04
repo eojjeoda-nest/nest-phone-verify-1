@@ -1,10 +1,13 @@
-import { Module } from '@nestjs/common';
+import { Injectable, Logger, Module, NestMiddleware } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { addTransactionalDataSource } from 'typeorm-transactional';
 import { DataSource } from 'typeorm';
 import { Phone } from './modules/phone/entities/phone.entity';
 import { PhoneModule } from './modules/phone/phone.module';
+import { NextFunction, Request } from 'express';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { LoggingInterceptor } from './interceptors/logging.interceptor';
 
 @Module({
   imports: [
@@ -34,6 +37,11 @@ import { PhoneModule } from './modules/phone/phone.module';
     PhoneModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: LoggingInterceptor,
+    },
+  ],
 })
 export class AppModule {}
