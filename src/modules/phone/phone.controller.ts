@@ -10,10 +10,10 @@ export class PhoneController {
   constructor(private readonly phoneService: PhoneService) {}
 
   @Post('/send-code')
-  @HttpCode(HttpStatus.OK)
+  @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: '인증번호 생성 API', description: '인증번호를 생성한다.'})
   @ApiBody({ type: SendCodeDto })
-  @ApiResponse({ status: 200, description: '성공', type: SendCodeDto })
+  @ApiResponse({ status: 201, description: '생성 완료', type: SendCodeDto })
   @ApiResponse({ status: 400, description: '잘못된 요청' })
   async sendCode(@Body() sendCodeDto: SendCodeDto) {
     const { phoneNumber } = sendCodeDto;
