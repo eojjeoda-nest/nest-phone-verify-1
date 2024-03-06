@@ -1,8 +1,13 @@
-import { Module } from '@nestjs/common';
+import { Injectable, Logger, Module, NestMiddleware } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { addTransactionalDataSource } from 'typeorm-transactional';
 import { DataSource } from 'typeorm';
+import { Phone } from './modules/phone/entities/phone.entity';
+import { PhoneModule } from './modules/phone/phone.module';
+import { NextFunction, Request } from 'express';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { LoggingInterceptor } from './interceptors/logging.interceptor';
 
 @Module({
   imports: [
@@ -16,6 +21,7 @@ import { DataSource } from 'typeorm';
           username: process.env.DB_USERNAME,
           password: process.env.DB_PASSWORD,
           database: process.env.DB_DATABASE,
+          entities: [Phone],
           synchronize: process.env.DB_SYNC === 'true',
           timezone: 'Z',
         };
@@ -28,8 +34,14 @@ import { DataSource } from 'typeorm';
         return addTransactionalDataSource(new DataSource(options));
       },
     }),
+    PhoneModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: LoggingInterceptor,
+    },
+  ],
 })
 export class AppModule {}
