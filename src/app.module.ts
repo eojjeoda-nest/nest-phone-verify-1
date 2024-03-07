@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { addTransactionalDataSource } from 'typeorm-transactional';
 import { DataSource } from 'typeorm';
+import { PhoneVerifyModule } from './phone-verify/phone-verify.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { DataSource } from 'typeorm';
         return addTransactionalDataSource(new DataSource(options));
       },
     }),
+    PhoneVerifyModule,
   ],
   controllers: [],
   providers: [],
