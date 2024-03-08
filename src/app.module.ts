@@ -6,6 +6,8 @@ import { DataSource } from 'typeorm';
 import { PhoneVerifyModule } from './phone-verify/phone-verify.module';
 import { PhoneVerify } from './phone-verify/entities/phone-verify.entity';
 import { PhoneVerifyController } from './phone-verify/phone-verify.controller';
+import { APP_FILTER } from '@nestjs/core';
+import { HttpExceptionFilter } from './common/error/http-exception.filter';
 
 @Module({
   imports: [
@@ -36,5 +38,11 @@ import { PhoneVerifyController } from './phone-verify/phone-verify.controller';
     PhoneVerifyModule,
   ],
   controllers: [PhoneVerifyController],
+  providers: [
+    {
+      provide: APP_FILTER,
+      useClass: HttpExceptionFilter,
+    },
+  ],
 })
 export class AppModule {}
