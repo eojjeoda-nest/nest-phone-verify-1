@@ -1,3 +1,3 @@
-export class SendCodeResponseDto {
+export class VerifyCodeResponseDto {
   result: boolean;
 }
