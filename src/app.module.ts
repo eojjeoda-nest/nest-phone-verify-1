@@ -4,6 +4,8 @@ import { ConfigModule } from '@nestjs/config';
 import { addTransactionalDataSource } from 'typeorm-transactional';
 import { DataSource } from 'typeorm';
 import { PhoneVerifyModule } from './phone-verify/phone-verify.module';
+import { PhoneVerify } from './phone-verify/entities/phone-verify.entity';
+import { PhoneVerifyController } from './phone-verify/phone-verify.controller';
 
 @Module({
   imports: [
@@ -18,6 +20,7 @@ import { PhoneVerifyModule } from './phone-verify/phone-verify.module';
           password: process.env.DB_PASSWORD,
           database: process.env.DB_DATABASE,
           synchronize: process.env.DB_SYNC === 'true',
+          entities: [PhoneVerify],
           timezone: 'Z',
         };
       },
@@ -29,9 +32,9 @@ import { PhoneVerifyModule } from './phone-verify/phone-verify.module';
         return addTransactionalDataSource(new DataSource(options));
       },
     }),
+    TypeOrmModule.forFeature([PhoneVerify]),
     PhoneVerifyModule,
   ],
-  controllers: [],
-  providers: [],
+  controllers: [PhoneVerifyController],
 })
 export class AppModule {}
