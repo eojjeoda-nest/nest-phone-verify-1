@@ -14,7 +14,7 @@ export class PhoneVerify {
   phoneNumber: string;
 
   @Column()
-  code: number;
+  code: string;
 
   @UpdateDateColumn()
   sendAt: Date;
