@@ -29,7 +29,5 @@ import { DataSource } from 'typeorm';
       },
     }),
   ],
-  controllers: [],
-  providers: [],
 })
 export class AppModule {}

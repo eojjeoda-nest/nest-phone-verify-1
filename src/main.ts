@@ -2,13 +2,12 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { initializeTransactionalContext } from 'typeorm-transactional';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   initializeTransactionalContext();
 
   const app = await NestFactory.create(AppModule);
-  // TODO: 프로그램 구현
-  await app.listen(process.env.PORT || 8000);
 
   // 파이프라인 설정
   app.useGlobalPipes(
@@ -19,7 +18,17 @@ async function bootstrap() {
     }),
   );
 
-  console.log(`Application is running on: ${await app.getUrl()}`);
+  // Swagger 적용
+  const config = new DocumentBuilder()
+    .setTitle('phone-verify API')
+    .setDescription('어쩌다 nest 1주차')
+    .setVersion('1.0')
+    .build();
+
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api', app, document);
+
+  await app.listen(process.env.PORT || 8000);
 }
 
 bootstrap();
