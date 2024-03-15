@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
 
 export class PhoneVerifyDto {
   @IsNotEmpty()
@@ -6,6 +6,6 @@ export class PhoneVerifyDto {
   readonly phoneNumber: string;
 
   @IsNotEmpty()
-  @IsNumber()
+  @IsString()
   readonly code: string;
 }
